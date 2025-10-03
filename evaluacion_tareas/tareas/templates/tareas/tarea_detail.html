@@ -1,0 +1,15 @@
+<h1>{{ object.titulo }}</h1>
+<p><strong>Descripción:</strong> {{ object.descripcion }}</p>
+<p><strong>Prioridad:</strong> {{ object.prioridad }}</p>
+<p><strong>Estado:</strong> {% if object.vigente %}Vigente{% else %}Inactiva{% endif %}</p>
+<p><strong>Fecha creación:</strong> {{ object.fecha_creacion }}</p>
+{% if object.fecha_limite %}
+    <p><strong>Fecha límite:</strong> {{ object.fecha_limite }}</p>
+    <p><strong>Estado:</strong> {% if object.esta_vencida %}VENCIDA{% else %}En plazo{% endif %}</p>
+{% endif %}
+
+<p>
+    <a href="{% url 'tareas:tarea_update' object.pk %}">Editar</a> ·
+    <a href="{% url 'tareas:tarea_delete' object.pk %}">Eliminar</a> ·
+    <a href="{% url 'tareas:tarea_list' %}">Volver al listado</a>
+</p>

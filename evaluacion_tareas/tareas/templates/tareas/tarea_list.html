@@ -1,0 +1,46 @@
+<h1>Gestor de Tareas</h1>
+
+<form method="get">
+    <input type="text" name="q" placeholder="Buscar tareas..." value="{{ request.GET.q }}">
+    <select name="vigente">
+        <option value="">Todas</option>
+        <option value="true">Vigentes</option>
+        <option value="false">Inactivas</option>
+    </select>
+    <select name="prioridad">
+        <option value="">Todas las prioridades</option>
+        <option value="1">1 - Alta</option>
+        <option value="2">2 - Media</option>
+        <option value="3">3 - Baja</option>
+    </select>
+    <button>Filtrar</button>
+</form>
+
+<p><a href="{% url 'tareas:tarea_create' %}">➕ Nueva Tarea</a></p>
+
+<ul>
+    {% for tarea in tareas %}
+    <li>
+        <a href="{% url 'tareas:tarea_detail' tarea.pk %}">{{ tarea.titulo }}</a>
+        [Prioridad: {{ tarea.prioridad }}]
+        {% if tarea.vigente %}<strong>· Vigente</strong>{% else %}<em>· Inactiva</em>{% endif %}
+        {% if tarea.esta_vencida %}<span style="color: red;">· VENCIDA</span>{% endif %}
+        · <a href="{% url 'tareas:tarea_update' tarea.pk %}">Editar</a>
+        · <a href="{% url 'tareas:tarea_delete' tarea.pk %}">Eliminar</a>
+    </li>
+    {% empty %}
+    <li>No hay tareas.</li>
+    {% endfor %}
+</ul>
+
+{% if is_paginated %}
+<nav>
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+    {% endif %}
+    Página {{ page_obj.number }} de {{ paginator.num_pages }}
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+    {% endif %}
+</nav>
+{% endif %}
